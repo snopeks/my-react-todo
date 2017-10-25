@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import TodoModel from '../models/Todo';
-import TodoList from '../components/TodoList'
+import TodoList from '../components/TodoList';
+import CreateTodoForm from '../components/CreateTodoForm';
+
 
 class TodosContainer extends Component{
   constructor(){
@@ -19,10 +21,24 @@ class TodosContainer extends Component{
       })
     })
   }
+  createTodo(newBody){
+    let newTodo={
+      body: newBody,
+      completed: false
+    }
+    TodoModel.create(newTodo).then( (res) => {
+      console.log('created todo', res)
+      let todos = this.state.todos
+      todos.push(res)
+      this.setState({todos})
+    })
+    console.log('creating todo', newBody)
+  }
   render(){
     return(
       <div className = 'todosContainer'>
-        <h2>This is the todos container</h2>
+        <CreateTodoForm
+          createTodo={this.createTodo.bind(this)} />
         <TodoList
           todos={this.state.todos} />
       </div>
